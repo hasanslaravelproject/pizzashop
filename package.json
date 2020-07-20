@@ -11,7 +11,17 @@
     "react-dom": "^16.13.1",
     "react-helmet-async": "^1.0.5",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+
+    "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
+    "bootstrap-less": "^3.3.8",
+    "font-awesome": "^4.7.0",
+    "react-bootstrap": "^1.2.2",
+    "react-file-base64": "^1.0.3",
+    "react-js-pagination": "^3.0.3",
+    "react-slideshow-image": "^2.0.2"
+
   },
   "scripts": {
     "start": "react-scripts start",

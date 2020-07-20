@@ -7,11 +7,27 @@ import { HelmetProvider } from 'react-helmet-async';
 import ProductsContextProvider from './contexts/ProductsContext';
 import CartContextProvider from './contexts/CartContext';
 
+import "bootstrap/dist/css/bootstrap.css";
+import 'font-awesome/css/font-awesome.min.css';
+import './index.css';
+
+import Layout from "./components/Layout.js";
+import { BrowserRouter as Router, Switch  } from 'react-router-dom';
+
+
 ReactDOM.render(
     <HelmetProvider>
       <ProductsContextProvider>
         <CartContextProvider>
-          <Routes />
+          <Router>
+            <Switch>
+              <div className="container" style={{marginBottom: 60}} >
+                <Layout>
+                  <Routes />
+                </Layout>
+              </div>
+            </Switch>
+          </Router>
         </CartContextProvider>
       </ProductsContextProvider>
     </HelmetProvider>,
