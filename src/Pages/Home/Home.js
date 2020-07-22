@@ -1,12 +1,19 @@
-import React, { useEffect , useState, useContext} from "react";
+import React, { useEffect , useState, useContext} from 'react';
 import  { CartContext } from '../../contexts/CartContext';
+import { ProductsContext } from '../../contexts/ProductsContext';
 import Axios from 'axios'
 import {Link} from 'react-router-dom'
+
 import Pagination from "react-js-pagination";
 
 //require("bootstrap/less/bootstrap.less");
 const Home = () => {
     const { addProduct, cartItems, increase } = useContext(CartContext);
+
+    const isInCart = product => {
+        return !!cartItems.find(item => item.id === product.id);
+    }
+
     let [initialproduct, setInitialProduct] = useState([])
     let [product, setProduct] = useState([])
     let [categories, setCategories] = useState([])
@@ -20,7 +27,7 @@ const Home = () => {
             setActivePage(response.data.current_page);
             setTotalCount(response.data.total);
         })
-        .catch((err)=> {           
+        .catch(()=> {           
         })     
     }
     const fetchCategory = async () =>{
@@ -51,7 +58,7 @@ const Home = () => {
         })
         
     }
-    let [show, setShow] = useState(false)
+    let [] = useState(false)
     useEffect(() =>{
         fetchCategory() 
         fetchProduct() 
@@ -64,7 +71,7 @@ const Home = () => {
             setActivePage(response.data.current_page);
             setTotalCount(response.data.total);           
         })
-        .catch((error) => {            
+        .catch(() => {            
         })        
     }
     return (
@@ -83,11 +90,11 @@ const Home = () => {
                 </div>
             </div>                
             <div className="row mt-2">
-            <button type="button" className="btn btn-info text-center" style={{marginLeft: "5px"}} onClick={(e) => getFilteredProducts('All')}> All </button>
+            <button type="button" className="btn btn-info text-center" style={{marginLeft: "5px"}} onClick={() => getFilteredProducts('All')}> All </button>
                 {categories && categories.map(category => {
 
                     return (
-                        <a key={category.id} id={category.id} onClick={(e) => getFilteredProducts(category.id)} >
+                        <a key={category.id} id={category.id} onClick={() => getFilteredProducts(category.id)} >
                             <div style={{marginLeft: '20px'}}>
                             <img src={`http://127.0.0.1:8000/uploads/${category.image}`} alt="category" className="img-fluid" 
                             style={{objectFit: 'cover', display: 'block'}}/>
@@ -102,9 +109,9 @@ const Home = () => {
                     )
                 })}
             </div> 
-            <div className="row  mt-2"> 
-                {product && product.map(function(el) {
-                return   <div key={el.id} className="col-lg-4">
+           
+            {product && product.map(el => (
+                <div key={el.id} className="col-lg-4">
                     <div className="card border-primary p-0">
                         <div className="card-body  p-0">
                             <img src={`http://127.0.0.1:8000/uploads/${el.image}`} alt="product" className="img-fluid" style={{objectFit: 'cover'}}/>
@@ -114,17 +121,17 @@ const Home = () => {
                                 &nbsp;
 
                                 {
-                                    
-                                    !cartItems.find(item => item.id === el.id) && <button 
-                                        onClick={() => addProduct(el)}
-                                        className="btn btn-info text-center">Add to cart
-                                    </button>
+                                    isInCart(el) && 
+                                    <button 
+                                    onClick={() => increase(el)}
+                                    className="btn btn-outline-primary btn-sm">Add more</button>
                                 }
-                                
+
                                 {
-                                    cartItems.find(item => item.id === el.id) && <Link to="/cart" className="btn btn-info text-center">
-                                                View Cart 
-                                            </Link>
+                                    !isInCart(el) && 
+                                    <button 
+                                    onClick={() => addProduct(el)}
+                                    className="btn btn-primary btn-sm">Add to cart</button>
                                 }
                                 
                             
@@ -132,9 +139,48 @@ const Home = () => {
                         </div>
                     </div> 
                     </div> 
-                })} 
-            </div>
-            <Pagination
+            ))} 
+
+
+
+
+           {/* This is the example code for showing the dummy data and test the cart related fixed issue. */}
+           
+            {/* {
+                products.map(product => (
+                    <div className="row mt-2">
+                        <div className="card card-body">
+                            <img style={{display: "block", margin: "0 auto 10px", maxHeight: "200px"}} className="img-fluid" 
+                            src={product.photo + '?v=' + product.id} alt=""/>
+                            <p>{product.name}</p>
+                            <h3 className="text-left">{product.price}</h3>
+                            <div className="text-right">
+                                <Link  to="/" className="btn btn-link btn-sm mr-2">Details</Link>
+
+                                {
+                                    isInCart(product) && 
+                                    <button 
+                                    onClick={() => increase(product)}
+                                    className="btn btn-outline-primary btn-sm">Add more</button>
+                                }
+
+                                {
+                                    !isInCart(product) && 
+                                    <button 
+                                    onClick={() => addProduct(product)}
+                                    className="btn btn-primary btn-sm">Add to cart</button>
+                                }
+                                
+                            </div>
+                        </div>
+                        </div>
+            
+                ))
+            }
+            */}
+           
+           
+           <Pagination
             activePage={activePage}
             itemsCountPerPage={4}
             totalItemsCount={totalCount}

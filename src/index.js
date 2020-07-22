@@ -1,31 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import "bootstrap/dist/css/bootstrap.css";
-import 'font-awesome/css/font-awesome.min.css';
-import './index.css';
-import Routes from './Router/Routes';
-import Layout from "./components/layout/Layout";
+import Routes from './routes';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter,Switch  } from 'react-router-dom';
+
+import { HelmetProvider } from 'react-helmet-async';
 import ProductsContextProvider from './contexts/ProductsContext';
 import CartContextProvider from './contexts/CartContext';
 
+import "bootstrap/dist/css/bootstrap.css";
+import 'font-awesome/css/font-awesome.min.css';
+import './index.css';
+
+import Layout from "./components/Layout.js";
+import { BrowserRouter as Router, Switch  } from 'react-router-dom';
+
+
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-    <ProductsContextProvider>
+    <HelmetProvider>
+      <ProductsContextProvider>
         <CartContextProvider>
-        <Layout>
-          <Switch>
-            <div className="container" style={{marginBottom: 60}} >
-              <Routes />
-            </div>
-          </Switch>
-        </Layout>
+          <Router>
+            <Switch>
+              <div className="container" style={{marginBottom: 60}} >
+                <Layout>
+                  <Routes />
+                </Layout>
+              </div>
+            </Switch>
+          </Router>
         </CartContextProvider>
       </ProductsContextProvider>
-  </BrowserRouter> 
-  </React.StrictMode>,
+    </HelmetProvider>,
   document.getElementById('root')
 );
 

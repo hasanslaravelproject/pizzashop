@@ -1,14 +1,11 @@
+
 const Storage = (cartItems) => {
     localStorage.setItem('cart', JSON.stringify(cartItems.length > 0 ? cartItems: []));
 }
 
 export const sumItems = cartItems => {
-   
-
-    Storage(cartItems);   
+    Storage(cartItems);
     let itemCount = cartItems.reduce((total, product) => total + product.quantity, 0);
-    
-    
     let total = cartItems.reduce((total, product) => total + product.price * product.quantity, 0).toFixed(2);
     return { itemCount, total }
 }
@@ -35,21 +32,7 @@ export const CartReducer = (state, action) => {
                 cartItems: [...state.cartItems.filter(item => item.id !== action.payload.id)]
             }
         case "INCREASE":
-           
-            //console.log(" >> item qty++ << ", state.cartItems[state.cartItems.findIndex(item => item.id === action.payload.id)].quantity++);
-            //state.cartItems[state.cartItems.findIndex(item => item.id === action.payload.id)].quantity++
-           
-            const index = state.cartItems.findIndex(item => item.id === action.payload.id);
-           
-            
-            state.cartItems[index].quantity = state.cartItems[index].quantity + 1;
-
-            
-            //if (state.cartItems.find(item => item.id === action.payload.id)) {
-              //  state.cartItems.map(item => (item.id === action.payload.id ? { ...item, quantity: item.quantity + 1 } : item));
-
-            //}
-
+            state.cartItems[state.cartItems.findIndex(item => item.id === action.payload.id)].quantity++
             return {
                 ...state,
                 ...sumItems(state.cartItems),
@@ -57,10 +40,9 @@ export const CartReducer = (state, action) => {
             }
         case "DECREASE":
             state.cartItems[state.cartItems.findIndex(item => item.id === action.payload.id)].quantity--
-                return {
+            return {
                 ...state,
                 ...sumItems(state.cartItems),
-
                 cartItems: [...state.cartItems]
             }
         case "CHECKOUT":
